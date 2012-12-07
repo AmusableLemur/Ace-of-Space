@@ -2,19 +2,26 @@ package entities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.newdawn.slick.*;
 
 public class Player extends CollisionObject {
     private ArrayList<Bullet> bullets;
+    private Image graphic;
     private int timeSinceFire;
 
     public Player(GameContainer gc) {
-        super(gc.getWidth() / 2 - 15, gc.getHeight() - 50, 30, 20);
+        super(gc.getWidth() / 2 - 15, gc.getHeight() - 50, 16, 32);
 
         bullets = new ArrayList<Bullet>();
         timeSinceFire = 0;
+
+        try {
+            graphic = new Image("graphics/ship.png");
+        } catch (SlickException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -24,7 +31,7 @@ public class Player extends CollisionObject {
 
     @Override
     public void render(GameContainer gc, Graphics g) {
-        g.fillRect((int)x, (int)y, width, height);
+        g.drawImage(graphic, (int)x, (int)y);
 
         for (Bullet b : bullets) {
             b.render(gc, g);
