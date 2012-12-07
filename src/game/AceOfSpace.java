@@ -14,6 +14,7 @@ public class AceOfSpace extends BasicGame {
 
     @Override
     public void init(GameContainer gc) throws SlickException {
+        objects = new ArrayList<CollisionObject>();
         objects.add(new Player());
     }
 
