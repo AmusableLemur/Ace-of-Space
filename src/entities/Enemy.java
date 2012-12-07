@@ -6,9 +6,9 @@ import org.newdawn.slick.Graphics;
 public class Enemy extends CollisionObject {
     private double speed;
 
-    public Enemy(double x, double y) {
+    public Enemy(GameContainer gc) {
         // Bring the Noise
-        super(x, y, "graphics/enemy.png");
+        super(Math.random() * gc.getWidth(), -20, "graphics/enemy.png");
 
         this.speed = Math.random() / 2 + 0.1;
     }

@@ -24,7 +24,7 @@ public class AceOfSpace extends BasicGame {
     @Override
     public void update(GameContainer gc, int delta) throws SlickException {
         if (Math.random() < 0.1) {
-            enemies.add(new Enemy(Math.random() * gc.getWidth(), -20));
+            enemies.add(new Enemy(gc));
         }
 
         Iterator<Enemy> i = enemies.iterator();
