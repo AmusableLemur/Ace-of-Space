@@ -1,12 +1,12 @@
 package entities;
 
 public class Bullet implements CollisionObject {
-	public Bullet() {
+    public Bullet() {
 
-	}
-	
-	@Override
-	public boolean overlaps(CollisionObject o) {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    }
+
+    @Override
+    public boolean overlaps(CollisionObject o) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
