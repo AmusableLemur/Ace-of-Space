@@ -43,19 +43,19 @@ public class Player extends CollisionObject {
         timeSinceFire += delta;
         Input input = gc.getInput();
 
-        if (input.isKeyDown(Input.KEY_LEFT)) {
+        if (input.isKeyDown(Input.KEY_LEFT) && x > 0) {
             x -= delta * 0.5;
         }
 
-        if (input.isKeyDown(Input.KEY_RIGHT)) {
+        if (input.isKeyDown(Input.KEY_RIGHT) && (x + width) < gc.getWidth()) {
             x += delta * 0.5;
         }
 
-        if (input.isKeyDown(Input.KEY_UP)) {
+        if (input.isKeyDown(Input.KEY_UP) && y > 0) {
             y -= delta * 0.2;
         }
 
-        if (input.isKeyDown(Input.KEY_DOWN)) {
+        if (input.isKeyDown(Input.KEY_DOWN) && (y + height) < gc.getHeight()) {
             y += delta * 0.2;
         }
 
