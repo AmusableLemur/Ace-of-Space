@@ -1,14 +1,15 @@
-package entities;
+package entities.enemy;
 
+import entities.GameObject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
-public class Enemy extends GameObject {
+public abstract class Enemy extends GameObject {
     private double speed;
 
-    public Enemy(GameContainer gc) {
+    public Enemy(GameContainer gc, String image) {
         // Bring the Noise
-        super(Math.random() * gc.getWidth(), -20, "graphics/enemyShip.png");
+        super(Math.random() * gc.getWidth(), -20, image);
 
         this.speed = Math.random() / 2 + 0.1;
     }

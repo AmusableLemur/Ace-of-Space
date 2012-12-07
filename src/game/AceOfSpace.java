@@ -1,8 +1,11 @@
 package game;
 
 import entities.Bullet;
-import entities.Enemy;
 import entities.Player;
+import entities.enemy.Asteroid;
+import entities.enemy.Enemy;
+import entities.enemy.Saucer;
+import entities.enemy.Ship;
 import graphics.Background;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -72,7 +75,7 @@ public class AceOfSpace extends BasicGame {
 
     public void play(GameContainer gc, int delta) throws SlickException {
         if (Math.random() < 0.05 && !gc.isPaused()) {
-            enemies.add(new Enemy(gc));
+            enemies.add(new Asteroid(gc));
         }
 
         Iterator<Enemy> i = enemies.iterator();
