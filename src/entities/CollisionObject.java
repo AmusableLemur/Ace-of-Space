@@ -16,6 +16,26 @@ public abstract class CollisionObject {
 
     public abstract boolean overlaps(CollisionObject o);
 
+    public boolean outsideOfScreen(GameContainer gc) {
+        if (x < -10) {
+            return true;
+        }
+
+        if (y < -10) {
+            return true;
+        }
+
+        if (x > gc.getWidth() + width + 10) {
+            return true;
+        }
+
+        if (y > gc.getHeight() + height + 10) {
+            return true;
+        }
+
+        return false;
+    }
+
     public abstract void render(GameContainer gc, Graphics g);
 
     public abstract void update(GameContainer gc, int delta);
