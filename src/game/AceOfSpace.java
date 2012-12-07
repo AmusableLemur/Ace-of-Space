@@ -5,26 +5,49 @@ import entities.Enemy;
 import entities.Player;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.*;
 
 public class AceOfSpace extends BasicGame {
     private static final int GAME_OVER = -1;
     private static final int PAUSED = 0;
     private static final int PLAYING = 1;
+    private static final int MENU = 2;
 
     private int state;
     private ArrayList<Enemy> enemies;
+    private Input input;
     private Player player;
 
     public AceOfSpace() {
         super("Ace of Space");
     }
 
+    public void gameOver(GameContainer gc, int delta) {
+        if (input.isKeyPressed(input.KEY_SPACE)) {
+            try {
+                init(gc);
+            } catch (SlickException ex) {
+                Logger.getLogger(AceOfSpace.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            state = PLAYING;
+        }
+    }
+
     @Override
     public void init(GameContainer gc) throws SlickException {
         enemies = new ArrayList<>();
+        input = gc.getInput();
         player = new Player(gc);
         state = PLAYING;
+    }
+
+    public void pause(GameContainer gc, int delta) {
+        if (input.isKeyPressed(input.KEY_SPACE)) {
+            state = PLAYING;
+        }
     }
 
     public void play(GameContainer gc, int delta) throws SlickException {
@@ -60,12 +83,26 @@ public class AceOfSpace extends BasicGame {
         }
 
         player.update(gc, delta);
+
+        if (input.isKeyPressed(input.KEY_SPACE)) {
+            state = PAUSED;
+        }
     }
 
     @Override
     public void update(GameContainer gc, int delta) throws SlickException {
-        if (state == PLAYING) {
-            play(gc, delta);
+        switch (state) {
+            case GAME_OVER:
+                gameOver(gc, delta);
+                break;
+            case PAUSED:
+                pause(gc, delta);
+                break;
+            case PLAYING:
+                play(gc, delta);
+                break;
+            case MENU:
+                break;
         }
     }
 
