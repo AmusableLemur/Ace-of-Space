@@ -52,11 +52,16 @@ public class AceOfSpace extends BasicGame {
         background = new Background("graphics/bg.png", 0.05);
         stars = new Background("graphics/stars.png", 0.08);
         input = gc.getInput();
+        music = new Music("music/DefconZero.ogg");
         player = new Player(gc);
         state = STATE_PLAYING;
         score = 0;
         smallText = new UnicodeFont("graphics/apache.ttf", 32, false, false);
         largeText = new UnicodeFont("graphics/apache.ttf", 84, false, false);
+
+        if (!gameStarted) {
+            music.loop();
+        }
 
         smallText.addAsciiGlyphs();
         smallText.getEffects().add(new ColorEffect(java.awt.Color.white));
