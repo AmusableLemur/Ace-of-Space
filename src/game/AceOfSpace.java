@@ -1,6 +1,7 @@
 package game;
 
-import entities.*;
+import entities.CollisionObject;
+import entities.Player;
 import java.util.ArrayList;
 import org.newdawn.slick.*;
 
@@ -15,7 +16,7 @@ public class AceOfSpace extends BasicGame {
     @Override
     public void init(GameContainer gc) throws SlickException {
         objects = new ArrayList<CollisionObject>();
-        objects.add(new Player());
+        objects.add(new Player(gc));
     }
 
     @Override
@@ -36,6 +37,8 @@ public class AceOfSpace extends BasicGame {
         AppGameContainer app = new AppGameContainer(new AceOfSpace());
 
         app.setDisplayMode(width, height, false);
+        app.setMinimumLogicUpdateInterval(10);
+        app.setMaximumLogicUpdateInterval(30);
         app.start();
     }
 }
