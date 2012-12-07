@@ -11,7 +11,7 @@ public class Player extends GameObject {
     private int timeSinceFire;
 
     public Player(GameContainer gc) {
-        super(gc.getWidth() / 2 - 15, gc.getHeight() - 50, "graphics/player.png");
+        super(gc.getWidth() / 2 - 15, gc.getHeight() - 80, "graphics/player.png");
 
         bullets = new ArrayList<>();
         timeSinceFire = 0;
