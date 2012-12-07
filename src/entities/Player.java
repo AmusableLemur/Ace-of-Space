@@ -17,6 +17,26 @@ public class Player extends CollisionObject {
         timeSinceFire = 0;
     }
 
+    protected void controls(GameContainer gc, int delta) {
+        Input input = gc.getInput();
+
+        if ((input.isKeyDown(Input.KEY_LEFT) || input.isControllerLeft(0)) && x > 0) {
+            x -= delta * 0.5;
+        }
+
+        if ((input.isKeyDown(Input.KEY_RIGHT) || input.isControllerRight(0)) && (x + width) < gc.getWidth()) {
+            x += delta * 0.5;
+        }
+
+        if ((input.isKeyDown(Input.KEY_UP) || input.isControllerUp(0)) && y > 0) {
+            y -= delta * 0.2;
+        }
+
+        if ((input.isKeyDown(Input.KEY_DOWN) || input.isControllerDown(0)) && (y + height) < gc.getHeight()) {
+            y += delta * 0.2;
+        }
+    }
+
     public ArrayList<Bullet> getBullets() {
         return bullets;
     }
@@ -32,26 +52,11 @@ public class Player extends CollisionObject {
 
     @Override
     public void update(GameContainer gc, int delta) {
+        controls(gc, delta);
+
         timeSinceFire += delta;
-        Input input = gc.getInput();
 
-        if (input.isKeyDown(Input.KEY_LEFT) && x > 0) {
-            x -= delta * 0.5;
-        }
-
-        if (input.isKeyDown(Input.KEY_RIGHT) && (x + width) < gc.getWidth()) {
-            x += delta * 0.5;
-        }
-
-        if (input.isKeyDown(Input.KEY_UP) && y > 0) {
-            y -= delta * 0.2;
-        }
-
-        if (input.isKeyDown(Input.KEY_DOWN) && (y + height) < gc.getHeight()) {
-            y += delta * 0.2;
-        }
-
-        if (timeSinceFire > 100) {
+        if (timeSinceFire > 500) {
             bullets.add(new Bullet(x + width / 2 - 3, y, 0.9));
             timeSinceFire = 0;
         }
