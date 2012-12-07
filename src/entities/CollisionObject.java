@@ -1,6 +1,7 @@
 package entities;
 
-import org.newdawn.slick.*;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 
 public abstract class CollisionObject {
     protected double x, y;
