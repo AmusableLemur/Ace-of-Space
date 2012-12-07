@@ -17,6 +17,10 @@ public class Player extends CollisionObject {
         timeSinceFire = 0;
     }
 
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
+    }
+
     @Override
     public boolean overlaps(CollisionObject o) {
         throw new UnsupportedOperationException("Not supported yet.");
