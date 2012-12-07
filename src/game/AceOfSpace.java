@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.*;
+import org.newdawn.slick.font.effects.ColorEffect;
 
 public class AceOfSpace extends BasicGame {
     private static final int GAME_OVER = -1;
@@ -19,6 +20,7 @@ public class AceOfSpace extends BasicGame {
     private ArrayList<Enemy> enemies;
     private Input input;
     private Player player;
+    private UnicodeFont largeText, smallText;
 
     public AceOfSpace() {
         super("Ace of Space");
@@ -31,7 +33,7 @@ public class AceOfSpace extends BasicGame {
             } catch (SlickException ex) {
                 Logger.getLogger(AceOfSpace.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             state = PLAYING;
         }
     }
@@ -42,6 +44,16 @@ public class AceOfSpace extends BasicGame {
         input = gc.getInput();
         player = new Player(gc);
         state = PLAYING;
+        smallText = new UnicodeFont("graphics/apache.ttf", 32, false, false);
+        largeText = new UnicodeFont("graphics/apache.ttf", 84, false, false);
+
+        smallText.addAsciiGlyphs();
+        smallText.getEffects().add(new ColorEffect(java.awt.Color.white));
+        smallText.loadGlyphs();
+
+        largeText.addAsciiGlyphs();
+        largeText.getEffects().add(new ColorEffect(java.awt.Color.white));
+        largeText.loadGlyphs();
     }
 
     public void pause(GameContainer gc, int delta) {
@@ -113,6 +125,26 @@ public class AceOfSpace extends BasicGame {
         }
 
         player.render(gc, g);
+
+        switch (state) {
+            case GAME_OVER:
+                String title = "Game Over";
+                String subtitle = "Press space to restart";
+
+                largeText.drawString(
+                        gc.getWidth() / 2 - largeText.getWidth(title) / 2,
+                        gc.getHeight() / 2 - 60,
+                        title
+                    );
+
+                smallText.drawString(
+                        gc.getWidth() / 2 - smallText.getWidth(subtitle) / 2,
+                        gc.getHeight() / 2 + 20,
+                        subtitle
+                    );
+
+                break;
+        }
     }
 
     public static void main(String[] args) throws SlickException {
