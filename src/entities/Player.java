@@ -22,11 +22,6 @@ public class Player extends CollisionObject {
     }
 
     @Override
-    public boolean overlaps(CollisionObject o) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void render(GameContainer gc, Graphics g) {
         g.drawImage(graphic, (int)x, (int)y);
 

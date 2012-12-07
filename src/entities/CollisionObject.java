@@ -26,7 +26,25 @@ public abstract class CollisionObject {
         this.height = graphic.getHeight();
     }
 
-    public abstract boolean overlaps(CollisionObject o);
+    public boolean overlaps(CollisionObject o) {
+		if ((x + width) < o.x) {
+			return false;
+		}
+
+		if ((y + height) < o.y) {
+			return false;
+		}
+
+		if (y > (o.y + o.height)) {
+			return false;
+		}
+
+		if (x > (o.x + o.width)) {
+			return false;
+		}
+
+		return true;
+    }
 
     public boolean outsideOfScreen(GameContainer gc) {
         if (x < -30) {
