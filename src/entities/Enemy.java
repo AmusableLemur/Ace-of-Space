@@ -4,9 +4,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public class Enemy extends CollisionObject {
-    public Enemy() {
+    private double speed;
+
+    public Enemy(double x, double y) {
         // Bring the Noise
-        super(10, 10, 10, 10);
+        super(x, y, "graphics/enemy.png");
+
+        this.speed = Math.random() / 2 + 0.1;
     }
 
     @Override
@@ -16,11 +20,11 @@ public class Enemy extends CollisionObject {
 
     @Override
     public void render(GameContainer gc, Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        g.drawImage(graphic, (int)x, (int)y);
     }
 
     @Override
     public void update(GameContainer gc, int delta) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        y += speed * delta;
     }
 }

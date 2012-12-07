@@ -1,6 +1,7 @@
 package game;
 
 import entities.CollisionObject;
+import entities.Enemy;
 import entities.Player;
 import java.util.ArrayList;
 import org.newdawn.slick.*;
@@ -21,6 +22,10 @@ public class AceOfSpace extends BasicGame {
 
     @Override
     public void update(GameContainer gc, int delta) throws SlickException {
+        if (Math.random() < 0.1) {
+            objects.add(new Enemy(Math.random() * gc.getWidth(), -20));
+        }
+
         for (CollisionObject o : objects) {
             o.update(gc, delta);
         }
