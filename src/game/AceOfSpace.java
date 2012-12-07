@@ -20,10 +20,13 @@ public class AceOfSpace extends BasicGame {
     private static final int STATE_PLAYING = 1;
     private static final int STATE_MENU = 2;
 
-    private int score, state;
+    private boolean gameStarted;
+    private double score;
+    private int state;
     private ArrayList<Enemy> enemies;
     private Background background, stars;
     private Input input;
+    private Music music;
     private Player player;
     private UnicodeFont largeText, smallText;
 
@@ -65,15 +68,19 @@ public class AceOfSpace extends BasicGame {
 
         gc.setDefaultFont(smallText);
         gc.setShowFPS(false);
+
+        gameStarted = true;
     }
 
     public void pause(GameContainer gc, int delta) {
-        if (input.isKeyPressed(input.KEY_SPACE)) {
+        if (input.isKeyPressed(Input.KEY_SPACE)) {
             state = STATE_PLAYING;
         }
     }
 
     public void play(GameContainer gc, int delta) throws SlickException {
+        score += (double)delta / 100;
+
         if (Math.random() < 0.05 && !gc.isPaused()) {
             enemies.add(new Asteroid(gc));
         }
@@ -98,7 +105,7 @@ public class AceOfSpace extends BasicGame {
                     i.remove();
                     bi.remove();
 
-                    score += 10;
+                    score += 20;
                 }
             }
 
@@ -144,7 +151,7 @@ public class AceOfSpace extends BasicGame {
 
         player.render(gc, g);
 
-        String infoText = "Score: " + score;
+        String infoText = "Score: " + (int)score;
         smallText.drawString(10, 10, infoText);
 
         switch (state) {
