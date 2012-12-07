@@ -55,6 +55,9 @@ public class AceOfSpace extends BasicGame {
         largeText.addAsciiGlyphs();
         largeText.getEffects().add(new ColorEffect(java.awt.Color.white));
         largeText.loadGlyphs();
+
+        gc.setDefaultFont(smallText);
+        gc.setShowFPS(false);
     }
 
     public void pause(GameContainer gc, int delta) {
@@ -87,6 +90,8 @@ public class AceOfSpace extends BasicGame {
                 if (e.overlaps(b)) {
                     i.remove();
                     bi.remove();
+
+                    score += 10;
                 }
             }
 
@@ -126,6 +131,9 @@ public class AceOfSpace extends BasicGame {
         }
 
         player.render(gc, g);
+
+        String infoText = "Score: " + score;
+        smallText.drawString(10, 10, infoText);
 
         switch (state) {
             case STATE_GAME_OVER:
