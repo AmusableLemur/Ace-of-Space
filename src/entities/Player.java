@@ -4,8 +4,14 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public class Player implements CollisionObject {
-    public Player() {
+    private double x, y;
+    private int width, height;
 
+    public Player() {
+        x = 10;
+        y = 10;
+        width = 20;
+        height = 20;
     }
 
     @Override
@@ -15,11 +21,11 @@ public class Player implements CollisionObject {
 
     @Override
     public void render(GameContainer gc, Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        g.fillRect((int)x, (int)y, width, height);
     }
 
     @Override
     public void update(GameContainer gc, int delta) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        x += delta * 0.1;
     }
 }
