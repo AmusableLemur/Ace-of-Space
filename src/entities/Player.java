@@ -56,10 +56,10 @@ public class Player extends CollisionObject {
             timeSinceFire = 0;
         }
 
-        Iterator i = bullets.iterator();
+        Iterator<Bullet> i = bullets.iterator();
 
         while (i.hasNext()) {
-            Bullet b = (Bullet)i.next();
+            Bullet b = i.next();
 
             b.update(gc, delta);
 
