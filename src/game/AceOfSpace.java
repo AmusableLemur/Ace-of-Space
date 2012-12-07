@@ -1,6 +1,5 @@
 package game;
 
-import entities.CollisionObject;
 import entities.Enemy;
 import entities.Player;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class AceOfSpace extends BasicGame {
 
     @Override
     public void init(GameContainer gc) throws SlickException {
-        enemies = new ArrayList<Enemy>();
+        enemies = new ArrayList<>();
         player = new Player(gc);
     }
 
