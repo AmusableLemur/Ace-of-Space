@@ -3,7 +3,7 @@ package entities;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
-public class Enemy extends CollisionObject {
+public class Enemy extends GameObject {
     private double speed;
 
     public Enemy(GameContainer gc) {

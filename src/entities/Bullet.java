@@ -3,7 +3,7 @@ package entities;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
-public class Bullet extends CollisionObject {
+public class Bullet extends GameObject {
     private double speed;
 
     public Bullet(double x, double y, double speed) {

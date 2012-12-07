@@ -6,15 +6,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 
-public abstract class CollisionObject {
+public abstract class GameObject extends Rectangle {
     protected Image graphic;
-    protected double x, y;
-    protected int width, height;
 
-    public CollisionObject(double x, double y, String image) {
-        this.x = x;
-        this.y = y;
+    public GameObject(double x, double y, String image) {
+        super((int)x, (int)y, 0, 0);
 
         try {
             graphic = new Image(image);
@@ -22,28 +20,8 @@ public abstract class CollisionObject {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        this.width = graphic.getWidth();
-        this.height = graphic.getHeight();
-    }
-
-    public boolean overlaps(CollisionObject o) {
-		if ((x + width) < o.x) {
-			return false;
-		}
-
-		if ((y + height) < o.y) {
-			return false;
-		}
-
-		if (y > (o.y + o.height)) {
-			return false;
-		}
-
-		if (x > (o.x + o.width)) {
-			return false;
-		}
-
-		return true;
+        setWidth(graphic.getWidth());
+        setHeight(graphic.getHeight());
     }
 
     public boolean outsideOfScreen(GameContainer gc) {

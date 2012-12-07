@@ -87,7 +87,7 @@ public class AceOfSpace extends BasicGame {
             while (bi.hasNext()) {
                 Bullet b = bi.next();
 
-                if (e.overlaps(b)) {
+                if (e.intersects(b)) {
                     i.remove();
                     bi.remove();
 
@@ -95,7 +95,7 @@ public class AceOfSpace extends BasicGame {
                 }
             }
 
-            if (e.overlaps(player)) {
+            if (e.intersects(player)) {
                 state = STATE_GAME_OVER;
             }
         }
