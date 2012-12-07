@@ -60,7 +60,7 @@ public class Player extends CollisionObject {
         }
 
         if (timeSinceFire > 100) {
-            bullets.add(new Bullet(x + width / 2 - 2, y, 0.9));
+            bullets.add(new Bullet(x + width / 2 - 4, y, 0.9));
             timeSinceFire = 0;
         }
 
