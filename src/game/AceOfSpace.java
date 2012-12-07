@@ -8,7 +8,6 @@ import java.util.Iterator;
 import org.newdawn.slick.*;
 
 public class AceOfSpace extends BasicGame {
-    private static final int width = 800, height = 600;
     private ArrayList<Enemy> enemies;
     private Player player;
 
@@ -70,7 +69,7 @@ public class AceOfSpace extends BasicGame {
     public static void main(String[] args) throws SlickException {
         AppGameContainer app = new AppGameContainer(new AceOfSpace());
 
-        app.setDisplayMode(width, height, false);
+        app.setDisplayMode(800, 600, false);
         app.setMinimumLogicUpdateInterval(10);
         app.setMaximumLogicUpdateInterval(30);
         app.start();
