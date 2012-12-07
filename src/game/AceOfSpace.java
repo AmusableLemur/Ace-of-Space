@@ -8,6 +8,11 @@ import java.util.Iterator;
 import org.newdawn.slick.*;
 
 public class AceOfSpace extends BasicGame {
+    private static final int GAME_OVER = -1;
+    private static final int PAUSED = 0;
+    private static final int PLAYING = 1;
+
+    private int state;
     private ArrayList<Enemy> enemies;
     private Player player;
 
@@ -19,10 +24,10 @@ public class AceOfSpace extends BasicGame {
     public void init(GameContainer gc) throws SlickException {
         enemies = new ArrayList<>();
         player = new Player(gc);
+        state = PLAYING;
     }
 
-    @Override
-    public void update(GameContainer gc, int delta) throws SlickException {
+    public void play(GameContainer gc, int delta) throws SlickException {
         if (Math.random() < 0.1 && !gc.isPaused()) {
             enemies.add(new Enemy(gc));
         }
@@ -50,11 +55,18 @@ public class AceOfSpace extends BasicGame {
             }
 
             if (e.overlaps(player)) {
-                gc.pause();
+                state = GAME_OVER;
             }
         }
 
         player.update(gc, delta);
+    }
+
+    @Override
+    public void update(GameContainer gc, int delta) throws SlickException {
+        if (state == PLAYING) {
+            play(gc, delta);
+        }
     }
 
     @Override
