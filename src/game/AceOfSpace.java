@@ -11,12 +11,12 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;
 
 public class AceOfSpace extends BasicGame {
-    private static final int GAME_OVER = -1;
-    private static final int PAUSED = 0;
-    private static final int PLAYING = 1;
-    private static final int MENU = 2;
+    private static final int STATE_GAME_OVER = -1;
+    private static final int STATE_PAUSED = 0;
+    private static final int STATE_PLAYING = 1;
+    private static final int STATE_MENU = 2;
 
-    private int state;
+    private int score, state;
     private ArrayList<Enemy> enemies;
     private Input input;
     private Player player;
@@ -34,7 +34,7 @@ public class AceOfSpace extends BasicGame {
                 Logger.getLogger(AceOfSpace.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            state = PLAYING;
+            state = STATE_PLAYING;
         }
     }
 
@@ -43,7 +43,8 @@ public class AceOfSpace extends BasicGame {
         enemies = new ArrayList<>();
         input = gc.getInput();
         player = new Player(gc);
-        state = PLAYING;
+        state = STATE_PLAYING;
+        score = 0;
         smallText = new UnicodeFont("graphics/apache.ttf", 32, false, false);
         largeText = new UnicodeFont("graphics/apache.ttf", 84, false, false);
 
@@ -58,7 +59,7 @@ public class AceOfSpace extends BasicGame {
 
     public void pause(GameContainer gc, int delta) {
         if (input.isKeyPressed(input.KEY_SPACE)) {
-            state = PLAYING;
+            state = STATE_PLAYING;
         }
     }
 
@@ -90,30 +91,30 @@ public class AceOfSpace extends BasicGame {
             }
 
             if (e.overlaps(player)) {
-                state = GAME_OVER;
+                state = STATE_GAME_OVER;
             }
         }
 
         player.update(gc, delta);
 
         if (input.isKeyPressed(input.KEY_SPACE)) {
-            state = PAUSED;
+            state = STATE_PAUSED;
         }
     }
 
     @Override
     public void update(GameContainer gc, int delta) throws SlickException {
         switch (state) {
-            case GAME_OVER:
+            case STATE_GAME_OVER:
                 gameOver(gc, delta);
                 break;
-            case PAUSED:
+            case STATE_PAUSED:
                 pause(gc, delta);
                 break;
-            case PLAYING:
+            case STATE_PLAYING:
                 play(gc, delta);
                 break;
-            case MENU:
+            case STATE_MENU:
                 break;
         }
     }
@@ -127,7 +128,7 @@ public class AceOfSpace extends BasicGame {
         player.render(gc, g);
 
         switch (state) {
-            case GAME_OVER:
+            case STATE_GAME_OVER:
                 String title = "Game Over";
                 String subtitle = "Press space to restart";
 
