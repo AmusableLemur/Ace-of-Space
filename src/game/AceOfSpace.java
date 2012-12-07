@@ -4,11 +4,13 @@ import entities.CollisionObject;
 import entities.Enemy;
 import entities.Player;
 import java.util.ArrayList;
+import java.util.Iterator;
 import org.newdawn.slick.*;
 
 public class AceOfSpace extends BasicGame {
     private static final int width = 800, height = 600;
-    private ArrayList<CollisionObject> objects;
+    private ArrayList<Enemy> enemies;
+    private Player player;
 
     public AceOfSpace() {
         super("Ace of Space");
@@ -16,26 +18,38 @@ public class AceOfSpace extends BasicGame {
 
     @Override
     public void init(GameContainer gc) throws SlickException {
-        objects = new ArrayList<CollisionObject>();
-        objects.add(new Player(gc));
+        enemies = new ArrayList<Enemy>();
+        player = new Player(gc);
     }
 
     @Override
     public void update(GameContainer gc, int delta) throws SlickException {
         if (Math.random() < 0.1) {
-            objects.add(new Enemy(Math.random() * gc.getWidth(), -20));
+            enemies.add(new Enemy(Math.random() * gc.getWidth(), -20));
         }
 
-        for (CollisionObject o : objects) {
-            o.update(gc, delta);
+        Iterator<Enemy> i = enemies.iterator();
+
+        while (i.hasNext()) {
+            Enemy e = i.next();
+
+            e.update(gc, delta);
+
+            if (e.outsideOfScreen(gc)) {
+                i.remove();
+            }
         }
+
+        player.update(gc, delta);
     }
 
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
-        for (CollisionObject o : objects) {
-            o.render(gc, g);
+        for (Enemy e : enemies) {
+            e.render(gc, g);
         }
+
+        player.render(gc, g);
     }
 
     public static void main(String[] args) throws SlickException {
