@@ -3,9 +3,9 @@ package entities;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
-public class Bullet implements CollisionObject {
+public class Bullet extends CollisionObject {
     public Bullet() {
-
+        super(10, 10, 10, 10);
     }
 
     @Override

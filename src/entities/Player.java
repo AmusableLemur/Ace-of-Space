@@ -3,15 +3,9 @@ package entities;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
-public class Player implements CollisionObject {
-    private double x, y;
-    private int width, height;
-
+public class Player extends CollisionObject {
     public Player() {
-        x = 10;
-        y = 10;
-        width = 20;
-        height = 20;
+        super(10, 10, 20, 20);
     }
 
     @Override

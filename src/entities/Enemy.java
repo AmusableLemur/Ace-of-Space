@@ -3,9 +3,10 @@ package entities;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
-public class Enemy implements CollisionObject {
+public class Enemy extends CollisionObject {
     public Enemy() {
         // Bring the Noise
+        super(10, 10, 10, 10);
     }
 
     @Override
