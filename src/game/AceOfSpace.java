@@ -1,5 +1,6 @@
 package game;
 
+import entities.Bullet;
 import entities.Enemy;
 import entities.Player;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class AceOfSpace extends BasicGame {
 
     @Override
     public void update(GameContainer gc, int delta) throws SlickException {
-        if (Math.random() < 0.1) {
+        if (Math.random() < 0.1 && !gc.isPaused()) {
             enemies.add(new Enemy(gc));
         }
 
@@ -36,6 +37,21 @@ public class AceOfSpace extends BasicGame {
 
             if (e.outsideOfScreen(gc)) {
                 i.remove();
+            }
+
+            Iterator<Bullet> bi = player.getBullets().iterator();
+
+            while (bi.hasNext()) {
+                Bullet b = bi.next();
+
+                if (e.overlaps(b)) {
+                    i.remove();
+                    bi.remove();
+                }
+            }
+
+            if (e.overlaps(player)) {
+                gc.pause();
             }
         }
 
