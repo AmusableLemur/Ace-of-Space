@@ -8,7 +8,7 @@ public class Enemy extends GameObject {
 
     public Enemy(GameContainer gc) {
         // Bring the Noise
-        super(Math.random() * gc.getWidth(), -20, "graphics/enemy.png");
+        super(Math.random() * gc.getWidth(), -20, "graphics/enemyShip.png");
 
         this.speed = Math.random() / 2 + 0.1;
     }

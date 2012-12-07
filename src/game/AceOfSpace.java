@@ -3,6 +3,7 @@ package game;
 import entities.Bullet;
 import entities.Enemy;
 import entities.Player;
+import graphics.Background;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ public class AceOfSpace extends BasicGame {
 
     private int score, state;
     private ArrayList<Enemy> enemies;
+    private Background background, stars;
     private Input input;
     private Player player;
     private UnicodeFont largeText, smallText;
@@ -41,6 +43,8 @@ public class AceOfSpace extends BasicGame {
     @Override
     public void init(GameContainer gc) throws SlickException {
         enemies = new ArrayList<>();
+        background = new Background("graphics/bg.png", 0.05);
+        stars = new Background("graphics/stars.png", 0.08);
         input = gc.getInput();
         player = new Player(gc);
         state = STATE_PLAYING;
@@ -67,7 +71,7 @@ public class AceOfSpace extends BasicGame {
     }
 
     public void play(GameContainer gc, int delta) throws SlickException {
-        if (Math.random() < 0.1 && !gc.isPaused()) {
+        if (Math.random() < 0.05 && !gc.isPaused()) {
             enemies.add(new Enemy(gc));
         }
 
@@ -101,6 +105,8 @@ public class AceOfSpace extends BasicGame {
         }
 
         player.update(gc, delta);
+        background.update(gc, delta);
+        stars.update(gc, delta);
 
         if (input.isKeyPressed(input.KEY_SPACE)) {
             state = STATE_PAUSED;
@@ -126,6 +132,9 @@ public class AceOfSpace extends BasicGame {
 
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
+        background.render(gc, g);
+        stars.render(gc, g);
+
         for (Enemy e : enemies) {
             e.render(gc, g);
         }

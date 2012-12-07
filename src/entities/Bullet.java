@@ -7,7 +7,7 @@ public class Bullet extends GameObject {
     private double speed;
 
     public Bullet(double x, double y, double speed) {
-        super(x, y, "graphics/player_bullet.png");
+        super(x, y, "graphics/laserGreen.png");
 
         this.speed = speed;
     }
