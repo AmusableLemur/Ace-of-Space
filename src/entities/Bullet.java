@@ -4,8 +4,12 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public class Bullet extends CollisionObject {
-    public Bullet() {
-        super(10, 10, 10, 10);
+    private double speed;
+
+    public Bullet(double x, double y, double speed) {
+        super(x, y, 5, 5);
+
+        this.speed = speed;
     }
 
     @Override
@@ -15,11 +19,11 @@ public class Bullet extends CollisionObject {
 
     @Override
     public void render(GameContainer gc, Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        g.fillOval((int)x, (int)y, width, height);
     }
 
     @Override
     public void update(GameContainer gc, int delta) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        y -= speed * delta;
     }
 }
