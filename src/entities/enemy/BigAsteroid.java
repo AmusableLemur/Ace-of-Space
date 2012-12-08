@@ -9,8 +9,6 @@ public class BigAsteroid extends Enemy {
         super(gc, "graphics/meteorBig.png");
 
         rotationSpeed = Math.random() * 4 - 2;
-
-        setY(-graphic.getHeight() - 5);
     }
 
     @Override

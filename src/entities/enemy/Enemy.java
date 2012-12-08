@@ -12,6 +12,8 @@ public abstract class Enemy extends GameObject {
         super(Math.random() * gc.getWidth(), -20, image);
 
         this.speed = Math.random() / 2 + 0.1;
+
+        setY(-graphic.getHeight() - 5);
     }
 
     @Override
