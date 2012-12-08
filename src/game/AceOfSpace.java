@@ -1,6 +1,7 @@
 package game;
 
 import entities.Bullet;
+import entities.Explosion;
 import entities.Player;
 import entities.enemy.Asteroid;
 import entities.enemy.Enemy;
@@ -24,6 +25,7 @@ public class AceOfSpace extends BasicGame {
     private double score;
     private int state;
     private ArrayList<Enemy> enemies;
+    private ArrayList<Explosion> explosions;
     private Background background, stars;
     private Input input;
     private Music music;
@@ -49,6 +51,7 @@ public class AceOfSpace extends BasicGame {
     @Override
     public void init(GameContainer gc) throws SlickException {
         enemies = new ArrayList<>();
+        explosions = new ArrayList<>();
         background = new Background("graphics/bg.png", 0.05);
         stars = new Background("graphics/stars.png", 0.08);
         input = gc.getInput();
@@ -90,15 +93,15 @@ public class AceOfSpace extends BasicGame {
             enemies.add(new Asteroid(gc));
         }
 
-        Iterator<Enemy> i = enemies.iterator();
+        Iterator<Enemy> ei = enemies.iterator();
 
-        while (i.hasNext()) {
-            Enemy e = i.next();
+        while (ei.hasNext()) {
+            Enemy e = ei.next();
 
             e.update(gc, delta);
 
             if (e.outsideOfScreen(gc)) {
-                i.remove();
+                ei.remove();
             }
 
             Iterator<Bullet> bi = player.getBullets().iterator();
@@ -107,8 +110,10 @@ public class AceOfSpace extends BasicGame {
                 Bullet b = bi.next();
 
                 if (e.intersects(b)) {
-                    i.remove();
+                    ei.remove();
                     bi.remove();
+
+                    explosions.add(new Explosion(b.getX(), b.getY(), 100));
 
                     score += 20;
                 }
@@ -116,6 +121,18 @@ public class AceOfSpace extends BasicGame {
 
             if (e.intersects(player)) {
                 state = STATE_GAME_OVER;
+            }
+        }
+
+        Iterator<Explosion> ix = explosions.iterator();
+
+        while (ix.hasNext()) {
+            Explosion ex = ix.next();
+
+            ex.update(gc, delta);
+
+            if (ex.getTime() < 0) {
+                ix.remove();
             }
         }
 
@@ -151,6 +168,10 @@ public class AceOfSpace extends BasicGame {
         stars.render(gc, g);
 
         for (Enemy e : enemies) {
+            e.render(gc, g);
+        }
+
+        for (Explosion e : explosions) {
             e.render(gc, g);
         }
 
