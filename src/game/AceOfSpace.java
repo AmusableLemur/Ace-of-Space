@@ -44,6 +44,7 @@ public class AceOfSpace extends BasicGame {
                 Logger.getLogger(AceOfSpace.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            music.resume();
             state = STATE_PLAYING;
         }
     }
@@ -82,6 +83,7 @@ public class AceOfSpace extends BasicGame {
 
     public void pause(GameContainer gc, int delta) {
         if (input.isKeyPressed(Input.KEY_SPACE)) {
+            music.resume();
             state = STATE_PLAYING;
         }
     }
@@ -120,6 +122,7 @@ public class AceOfSpace extends BasicGame {
             }
 
             if (e.intersects(player)) {
+                music.pause();
                 state = STATE_GAME_OVER;
             }
         }
@@ -141,6 +144,7 @@ public class AceOfSpace extends BasicGame {
         stars.update(gc, delta);
 
         if (input.isKeyPressed(input.KEY_SPACE)) {
+            music.pause();
             state = STATE_PAUSED;
         }
     }
