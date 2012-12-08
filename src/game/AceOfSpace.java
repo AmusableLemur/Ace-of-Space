@@ -41,30 +41,31 @@ public class AceOfSpace extends BasicGame {
     public void init(GameContainer gc) throws SlickException {
         enemies = new CopyOnWriteArrayList<>();
         explosions = new CopyOnWriteArrayList<>();
-        background = new Background("graphics/bg.png", 0.05);
-        stars = new Background("graphics/stars.png", 0.08);
-        input = gc.getInput();
-        music = new Music("music/DefconZero.ogg");
         player = new Player(gc);
         gameTime = 0;
         state = STATE_PLAYING;
         score = 0;
-        smallText = new UnicodeFont("graphics/apache.ttf", 32, false, false);
-        largeText = new UnicodeFont("graphics/apache.ttf", 84, false, false);
 
         if (!gameStarted) {
+            background = new Background("graphics/bg.png", 0.05);
+            stars = new Background("graphics/stars.png", 0.08);
+            input = gc.getInput();
+            music = new Music("music/DefconZero.ogg");
+            smallText = new UnicodeFont("graphics/apache.ttf", 32, false, false);
+            largeText = new UnicodeFont("graphics/apache.ttf", 84, false, false);
+
             music.loop();
+
+            smallText.addAsciiGlyphs();
+            smallText.getEffects().add(new ColorEffect(java.awt.Color.white));
+            smallText.getEffects().add(new OutlineEffect(1, java.awt.Color.gray));
+            smallText.loadGlyphs();
+
+            largeText.addAsciiGlyphs();
+            largeText.getEffects().add(new ColorEffect(java.awt.Color.white));
+            largeText.getEffects().add(new OutlineEffect(3, java.awt.Color.gray));
+            largeText.loadGlyphs();
         }
-
-        smallText.addAsciiGlyphs();
-        smallText.getEffects().add(new ColorEffect(java.awt.Color.white));
-        smallText.getEffects().add(new OutlineEffect(1, java.awt.Color.gray));
-        smallText.loadGlyphs();
-
-        largeText.addAsciiGlyphs();
-        largeText.getEffects().add(new ColorEffect(java.awt.Color.white));
-        largeText.getEffects().add(new OutlineEffect(3, java.awt.Color.gray));
-        largeText.loadGlyphs();
 
         gc.setDefaultFont(smallText);
         gc.setShowFPS(false);
@@ -153,7 +154,6 @@ public class AceOfSpace extends BasicGame {
 
                 if (input.isKeyPressed(input.KEY_SPACE)) {
                     init(gc);
-                    state = STATE_PLAYING;
                 }
 
                 break;
