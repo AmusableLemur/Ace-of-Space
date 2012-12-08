@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.font.effects.OutlineEffect;
 
 public class AceOfSpace extends BasicGame {
     private static final int STATE_GAME_OVER = -1;
@@ -67,10 +68,12 @@ public class AceOfSpace extends BasicGame {
 
         smallText.addAsciiGlyphs();
         smallText.getEffects().add(new ColorEffect(java.awt.Color.white));
+        smallText.getEffects().add(new OutlineEffect(1, java.awt.Color.gray));
         smallText.loadGlyphs();
 
         largeText.addAsciiGlyphs();
         largeText.getEffects().add(new ColorEffect(java.awt.Color.white));
+        largeText.getEffects().add(new OutlineEffect(3, java.awt.Color.gray));
         largeText.loadGlyphs();
 
         gc.setDefaultFont(smallText);

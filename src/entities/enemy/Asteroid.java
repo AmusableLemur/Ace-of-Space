@@ -8,7 +8,7 @@ public class Asteroid extends Enemy {
     public Asteroid(GameContainer gc) {
         super(gc, "graphics/meteorSmall.png");
 
-        rotationSpeed = Math.random() * 3;
+        rotationSpeed = Math.random() * 6 - 3;
     }
 
     @Override
