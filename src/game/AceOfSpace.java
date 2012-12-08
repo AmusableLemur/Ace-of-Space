@@ -20,6 +20,7 @@ public class AceOfSpace extends BasicGame {
     private static final int STATE_PAUSED = 0;
     private static final int STATE_PLAYING = 1;
     private static final int STATE_MENU = 2;
+    private static final int STATE_FROZEN = 3;
 
     private boolean gameStarted;
     private double score;
@@ -82,13 +83,6 @@ public class AceOfSpace extends BasicGame {
         gc.setShowFPS(false);
 
         gameStarted = true;
-    }
-
-    public void pause(GameContainer gc, int delta) {
-        if (input.isKeyPressed(Input.KEY_SPACE)) {
-            music.resume();
-            state = STATE_PLAYING;
-        }
     }
 
     public void play(GameContainer gc, int delta) throws SlickException {
@@ -156,6 +150,10 @@ public class AceOfSpace extends BasicGame {
             music.pause();
             state = STATE_PAUSED;
         }
+
+        if (!gc.hasFocus()) {
+            state = STATE_FROZEN;
+        }
     }
 
     @Override
@@ -163,14 +161,26 @@ public class AceOfSpace extends BasicGame {
         switch (state) {
             case STATE_GAME_OVER:
                 gameOver(gc, delta);
+
                 break;
             case STATE_PAUSED:
-                pause(gc, delta);
+                if (input.isKeyPressed(Input.KEY_SPACE)) {
+                    music.resume();
+                    state = STATE_PLAYING;
+                }
+
                 break;
             case STATE_PLAYING:
                 play(gc, delta);
+
                 break;
             case STATE_MENU:
+                break;
+            case STATE_FROZEN:
+                if (gc.hasFocus()) {
+                    state = STATE_PLAYING;
+                }
+                
                 break;
         }
     }
