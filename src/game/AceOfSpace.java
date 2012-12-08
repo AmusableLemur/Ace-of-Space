@@ -37,19 +37,6 @@ public class AceOfSpace extends BasicGame {
         super("Ace of Space");
     }
 
-    public void gameOver(GameContainer gc, int delta) {
-        if (input.isKeyPressed(input.KEY_SPACE)) {
-            try {
-                init(gc);
-            } catch (SlickException ex) {
-                Logger.getLogger(AceOfSpace.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            music.resume();
-            state = STATE_PLAYING;
-        }
-    }
-
     @Override
     public void init(GameContainer gc) throws SlickException {
         enemies = new CopyOnWriteArrayList<>();
@@ -129,7 +116,6 @@ public class AceOfSpace extends BasicGame {
             }
 
             if (e.intersects(player)) {
-                music.pause();
                 state = STATE_GAME_OVER;
             }
         }
@@ -164,7 +150,11 @@ public class AceOfSpace extends BasicGame {
 
         switch (state) {
             case STATE_GAME_OVER:
-                gameOver(gc, delta);
+
+                if (input.isKeyPressed(input.KEY_SPACE)) {
+                    init(gc);
+                    state = STATE_PLAYING;
+                }
 
                 break;
             case STATE_PAUSED:
