@@ -115,6 +115,9 @@ public class AceOfSpace extends BasicGame {
 
                     explosions.add(new Explosion(b.getX(), b.getY(), 100));
 
+                    Sound sound = new Sound("sound/explosion.wav");
+                    sound.play();
+
                     score += 20;
                 }
             }

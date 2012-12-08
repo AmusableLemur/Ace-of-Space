@@ -2,9 +2,9 @@ package entities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.newdawn.slick.*;
 
 public class Player extends GameObject {
     private ArrayList<Bullet> bullets;
@@ -58,6 +58,14 @@ public class Player extends GameObject {
 
         if (timeSinceFire > 500) {
             bullets.add(new Bullet(x + width / 2 - 3, y, 0.9));
+
+            try {
+                Sound sound = new Sound("sound/laser.wav");
+                sound.play();
+            } catch (SlickException ex) {
+                Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             timeSinceFire = 0;
         }
 
