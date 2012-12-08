@@ -5,8 +5,6 @@ import entities.Explosion;
 import entities.Player;
 import entities.enemy.Asteroid;
 import entities.enemy.Enemy;
-import entities.enemy.Saucer;
-import entities.enemy.Ship;
 import graphics.Background;
 import java.util.ArrayList;
 import java.util.Iterator;
