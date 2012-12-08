@@ -9,6 +9,8 @@ public class BigAsteroid extends Enemy {
     public BigAsteroid(GameContainer gc) {
         super(gc, "graphics/meteorBig.png");
 
+        setScore(40);
+
         rotationSpeed = Math.random() * 4 - 2;
     }
 

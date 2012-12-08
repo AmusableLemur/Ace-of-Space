@@ -6,6 +6,8 @@ import org.newdawn.slick.GameContainer;
 public class Saucer extends Enemy {
     public Saucer(GameContainer gc) {
         super(gc, "graphics/enemyUFO.png");
+
+        setScore(100);
     }
 
     @Override

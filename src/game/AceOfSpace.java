@@ -116,6 +116,8 @@ public class AceOfSpace extends BasicGame {
 
             for (Bullet b : player.getBullets()) {
                 if (e.intersects(b)) {
+                    score += e.getScore();
+
                     enemies.remove(e);
                     player.getBullets().remove(b);
 
@@ -123,8 +125,6 @@ public class AceOfSpace extends BasicGame {
 
                     Sound sound = new Sound("sound/explosion.wav");
                     sound.play();
-
-                    score += 20;
 
                     if (e instanceof BigAsteroid) {
                         enemies.add(new Asteroid(gc, e.getX(), e.getY(), -2));

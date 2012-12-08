@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 
 public abstract class Enemy extends GameObject {
     protected double speed;
+    private int score;
 
     public Enemy(GameContainer gc, String image) {
         // Bring the Noise
@@ -17,9 +18,17 @@ public abstract class Enemy extends GameObject {
         setY(-graphic.getHeight() - 5);
     }
 
+    public int getScore() {
+        return score;
+    }
+
     @Override
     public void render(GameContainer gc, Graphics g) {
         g.drawImage(graphic, getX(), getY());
+    }
+
+    protected void setScore(int score) {
+        this.score = score;
     }
 
     @Override
