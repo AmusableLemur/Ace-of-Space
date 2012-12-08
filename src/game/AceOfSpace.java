@@ -9,34 +9,99 @@ import entities.enemy.Enemy;
 import entities.enemy.Saucer;
 import graphics.Background;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.font.effects.OutlineEffect;
 
+/**
+ * Main class for game, keeps track of viewport and game objects
+ * @author Rasmus Larsson
+ */
 public class AceOfSpace extends BasicGame {
+    /**
+     * Used when player has been hit and game needs to be restarted
+     */
     private static final int STATE_GAME_OVER = -1;
+
+    /**
+     * Player initiated pausing of game
+     */
     private static final int STATE_PAUSED = 0;
+
+    /**
+     * Default mode, actual game is running
+     */
     private static final int STATE_PLAYING = 1;
+
+    /**
+     * Unused, will be used for credits and a "start game" button
+     */
     private static final int STATE_MENU = 2;
+
+    /**
+     * Freezes the game when it loses focus
+     */
     private static final int STATE_FROZEN = 3;
 
+    /**
+     * Makes sure certain elements aren't loaded or started twice
+     */
     private boolean gameStarted;
+
+    /**
+     * Player score
+     */
     private double score;
-    private int gameTime, state;
+
+    /**
+     * Time since current session started
+     */
+    private int gameTime;
+
+    /**
+     * The current state
+     */
+    private int state;
+
+    /**
+     * Lists for various game objects, CopyOnWrite to allow for concurrent
+     * modifications.
+     */
     private CopyOnWriteArrayList<Enemy> enemies;
     private CopyOnWriteArrayList<Explosion> explosions;
+
+    /**
+     * Scrolling background, two layers for "deep" effect
+     */
     private Background background, stars;
-    private Input input;
+
+    /**
+     * Background music, all other music is instantiated when it's used
+     */
     private Music music;
+
+    /**
+     * The human controlled player object
+     */
     private Player player;
+
+    /**
+     * Font faces
+     */
     private UnicodeFont largeText, smallText;
 
+    /**
+     * Constructor, sets the title of the window
+     */
     public AceOfSpace() {
         super("Ace of Space");
     }
 
+    /**
+     * Resets the game state and initiates game variables
+     * @param gc
+     * @throws SlickException
+     */
     @Override
     public void init(GameContainer gc) throws SlickException {
         enemies = new CopyOnWriteArrayList<>();
@@ -49,7 +114,6 @@ public class AceOfSpace extends BasicGame {
         if (!gameStarted) {
             background = new Background("graphics/bg.png", 0.05);
             stars = new Background("graphics/stars.png", 0.08);
-            input = gc.getInput();
             music = new Music("music/DefconZero.ogg");
             smallText = new UnicodeFont("graphics/apache.ttf", 32, false, false);
             largeText = new UnicodeFont("graphics/apache.ttf", 84, false, false);
@@ -73,6 +137,12 @@ public class AceOfSpace extends BasicGame {
         gameStarted = true;
     }
 
+    /**
+     * Method used for default game state, called on every logic update
+     * @param gc
+     * @param delta
+     * @throws SlickException
+     */
     public void play(GameContainer gc, int delta) throws SlickException {
         score += (double)delta / 100;
         gameTime += delta;
@@ -133,7 +203,7 @@ public class AceOfSpace extends BasicGame {
         background.update(gc, delta);
         stars.update(gc, delta);
 
-        if (input.isKeyPressed(input.KEY_SPACE)) {
+        if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             music.pause();
             state = STATE_PAUSED;
         }
@@ -143,22 +213,28 @@ public class AceOfSpace extends BasicGame {
         }
     }
 
+    /**
+     * Main logic update method, executes different game states
+     * @param gc
+     * @param delta
+     * @throws SlickException
+     */
     @Override
     public void update(GameContainer gc, int delta) throws SlickException {
-        if (input.isKeyDown(Input.KEY_F)) {
+        if (gc.getInput().isKeyDown(Input.KEY_F)) {
             gc.setFullscreen(!gc.isFullscreen());
         }
 
         switch (state) {
             case STATE_GAME_OVER:
 
-                if (input.isKeyPressed(input.KEY_SPACE)) {
+                if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
                     init(gc);
                 }
 
                 break;
             case STATE_PAUSED:
-                if (input.isKeyPressed(Input.KEY_SPACE)) {
+                if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
                     music.resume();
                     state = STATE_PLAYING;
                 }
@@ -179,6 +255,12 @@ public class AceOfSpace extends BasicGame {
         }
     }
 
+    /**
+     * Renders viewport, agnostic to game state except for Game Over
+     * @param gc
+     * @param g
+     * @throws SlickException
+     */
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
         background.render(gc, g);
