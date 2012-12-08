@@ -1,11 +1,12 @@
 package entities.enemy;
 
 import entities.GameObject;
+import entities.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public abstract class Enemy extends GameObject {
-    private double speed;
+    protected double speed;
 
     public Enemy(GameContainer gc, String image) {
         // Bring the Noise
@@ -24,5 +25,9 @@ public abstract class Enemy extends GameObject {
     @Override
     public void update(GameContainer gc, int delta) {
         setY((int)(getY() + speed * delta));
+    }
+
+    public void update(GameContainer gc, int delta, Player player) {
+        update(gc, delta);
     }
 }

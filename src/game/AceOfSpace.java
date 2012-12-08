@@ -103,12 +103,12 @@ public class AceOfSpace extends BasicGame {
             enemies.add(new BigAsteroid(gc));
         }
 
-        if (gameTime > 10000 && Math.random() < 0.01 && !gc.isPaused()) {
+        if (gameTime > 10000 && Math.random() < 0.005 && !gc.isPaused()) {
             enemies.add(new Saucer(gc));
         }
 
         for (Enemy e : enemies) {
-            e.update(gc, delta);
+            e.update(gc, delta, player);
 
             if (e.outsideOfScreen(gc)) {
                 enemies.remove(e);

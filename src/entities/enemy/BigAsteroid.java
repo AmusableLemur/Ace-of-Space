@@ -1,5 +1,6 @@
 package entities.enemy;
 
+import entities.Player;
 import org.newdawn.slick.GameContainer;
 
 public class BigAsteroid extends Enemy {
@@ -12,8 +13,8 @@ public class BigAsteroid extends Enemy {
     }
 
     @Override
-    public void update(GameContainer gc, int delta) {
-        super.update(gc, delta);
+    public void update(GameContainer gc, int delta, Player player) {
+        super.update(gc, delta, player);
         graphic.rotate((float)rotationSpeed);
     }
 }
