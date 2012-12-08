@@ -25,11 +25,11 @@ public abstract class GameObject extends Rectangle {
     }
 
     public boolean outsideOfScreen(GameContainer gc) {
-        if (getX() < -30) {
+        if (getX() < -(getWidth() + 30)) {
             return true;
         }
 
-        if (getY() < -30) {
+        if (getY() < -(getHeight() + 30)) {
             return true;
         }
 
@@ -37,7 +37,7 @@ public abstract class GameObject extends Rectangle {
             return true;
         }
 
-        if (getY() > gc.getHeight() + getWidth() + 30) {
+        if (getY() > gc.getHeight() + getHeight() + 30) {
             return true;
         }
 

@@ -1,13 +1,13 @@
 package entities;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.*;
 
 public class Player extends GameObject {
-    private ArrayList<Bullet> bullets;
+    private CopyOnWriteArrayList<Bullet> bullets;
     private int timeSinceFire;
 
     public Player(GameContainer gc) {
@@ -15,7 +15,7 @@ public class Player extends GameObject {
 
         setWidth(getWidth() / 2);
 
-        bullets = new ArrayList<>();
+        bullets = new CopyOnWriteArrayList<>();
         timeSinceFire = 0;
     }
 
@@ -39,7 +39,7 @@ public class Player extends GameObject {
         }
     }
 
-    public ArrayList<Bullet> getBullets() {
+    public CopyOnWriteArrayList<Bullet> getBullets() {
         return bullets;
     }
 
@@ -71,15 +71,11 @@ public class Player extends GameObject {
             timeSinceFire = 0;
         }
 
-        Iterator<Bullet> i = bullets.iterator();
-
-        while (i.hasNext()) {
-            Bullet b = i.next();
-
+        for (Bullet b : bullets) {
             b.update(gc, delta);
 
             if (b.outsideOfScreen(gc)) {
-                i.remove();
+                bullets.remove(b);
             }
         }
     }

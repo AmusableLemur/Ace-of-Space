@@ -4,10 +4,10 @@ import entities.Bullet;
 import entities.Explosion;
 import entities.Player;
 import entities.enemy.Asteroid;
+import entities.enemy.BigAsteroid;
 import entities.enemy.Enemy;
 import graphics.Background;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.*;
@@ -23,8 +23,8 @@ public class AceOfSpace extends BasicGame {
     private boolean gameStarted;
     private double score;
     private int state;
-    private ArrayList<Enemy> enemies;
-    private ArrayList<Explosion> explosions;
+    private CopyOnWriteArrayList<Enemy> enemies;
+    private CopyOnWriteArrayList<Explosion> explosions;
     private Background background, stars;
     private Input input;
     private Music music;
@@ -50,8 +50,8 @@ public class AceOfSpace extends BasicGame {
 
     @Override
     public void init(GameContainer gc) throws SlickException {
-        enemies = new ArrayList<>();
-        explosions = new ArrayList<>();
+        enemies = new CopyOnWriteArrayList<>();
+        explosions = new CopyOnWriteArrayList<>();
         background = new Background("graphics/bg.png", 0.05);
         stars = new Background("graphics/stars.png", 0.08);
         input = gc.getInput();
@@ -96,25 +96,21 @@ public class AceOfSpace extends BasicGame {
             enemies.add(new Asteroid(gc));
         }
 
-        Iterator<Enemy> ei = enemies.iterator();
+        if (Math.random() < 0.01 && !gc.isPaused()) {
+            enemies.add(new BigAsteroid(gc));
+        }
 
-        while (ei.hasNext()) {
-            Enemy e = ei.next();
-
+        for (Enemy e : enemies) {
             e.update(gc, delta);
 
             if (e.outsideOfScreen(gc)) {
-                ei.remove();
+                enemies.remove(e);
             }
 
-            Iterator<Bullet> bi = player.getBullets().iterator();
-
-            while (bi.hasNext()) {
-                Bullet b = bi.next();
-
+            for (Bullet b : player.getBullets()) {
                 if (e.intersects(b)) {
-                    ei.remove();
-                    bi.remove();
+                    enemies.remove(e);
+                    player.getBullets().remove(b);
 
                     explosions.add(new Explosion(b.getX(), b.getY(), 100));
 
@@ -122,6 +118,12 @@ public class AceOfSpace extends BasicGame {
                     sound.play();
 
                     score += 20;
+
+                    if (e instanceof BigAsteroid) {
+                        enemies.add(new Asteroid(gc, e.getX(), e.getY(), -2));
+                        enemies.add(new Asteroid(gc, e.getX(), e.getY(), 0));
+                        enemies.add(new Asteroid(gc, e.getX(), e.getY(), 2));
+                    }
                 }
             }
 
@@ -131,15 +133,11 @@ public class AceOfSpace extends BasicGame {
             }
         }
 
-        Iterator<Explosion> ix = explosions.iterator();
-
-        while (ix.hasNext()) {
-            Explosion ex = ix.next();
-
+        for (Explosion ex : explosions) {
             ex.update(gc, delta);
 
             if (ex.getTime() < 0) {
-                ix.remove();
+                explosions.remove(ex);
             }
         }
 
