@@ -6,6 +6,7 @@ import entities.Player;
 import entities.enemy.Asteroid;
 import entities.enemy.BigAsteroid;
 import entities.enemy.Enemy;
+import entities.enemy.Saucer;
 import graphics.Background;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
@@ -22,7 +23,7 @@ public class AceOfSpace extends BasicGame {
 
     private boolean gameStarted;
     private double score;
-    private int state;
+    private int gameTime, state;
     private CopyOnWriteArrayList<Enemy> enemies;
     private CopyOnWriteArrayList<Explosion> explosions;
     private Background background, stars;
@@ -57,6 +58,7 @@ public class AceOfSpace extends BasicGame {
         input = gc.getInput();
         music = new Music("music/DefconZero.ogg");
         player = new Player(gc);
+        gameTime = 0;
         state = STATE_PLAYING;
         score = 0;
         smallText = new UnicodeFont("graphics/apache.ttf", 32, false, false);
@@ -91,6 +93,7 @@ public class AceOfSpace extends BasicGame {
 
     public void play(GameContainer gc, int delta) throws SlickException {
         score += (double)delta / 100;
+        gameTime += delta;
 
         if (Math.random() < 0.05 && !gc.isPaused()) {
             enemies.add(new Asteroid(gc));
@@ -98,6 +101,10 @@ public class AceOfSpace extends BasicGame {
 
         if (Math.random() < 0.01 && !gc.isPaused()) {
             enemies.add(new BigAsteroid(gc));
+        }
+
+        if (gameTime > 10000 && Math.random() < 0.01 && !gc.isPaused()) {
+            enemies.add(new Saucer(gc));
         }
 
         for (Enemy e : enemies) {
