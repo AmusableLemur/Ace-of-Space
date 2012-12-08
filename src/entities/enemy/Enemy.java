@@ -16,11 +16,11 @@ public abstract class Enemy extends GameObject {
 
     @Override
     public void render(GameContainer gc, Graphics g) {
-        g.drawImage(graphic, (int)x, (int)y);
+        g.drawImage(graphic, getX(), getY());
     }
 
     @Override
     public void update(GameContainer gc, int delta) {
-        y += speed * delta;
+        setY((int)(getY() + speed * delta));
     }
 }

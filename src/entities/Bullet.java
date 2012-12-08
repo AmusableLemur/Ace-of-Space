@@ -9,6 +9,8 @@ public class Bullet extends GameObject {
     public Bullet(double x, double y, double speed) {
         super(x, y, "graphics/laserGreen.png");
 
+        setX(getX() - graphic.getWidth() / 2);
+
         this.speed = speed;
     }
 
