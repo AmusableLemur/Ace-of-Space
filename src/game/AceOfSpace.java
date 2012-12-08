@@ -158,6 +158,10 @@ public class AceOfSpace extends BasicGame {
 
     @Override
     public void update(GameContainer gc, int delta) throws SlickException {
+        if (input.isKeyDown(Input.KEY_F)) {
+            gc.setFullscreen(!gc.isFullscreen());
+        }
+
         switch (state) {
             case STATE_GAME_OVER:
                 gameOver(gc, delta);
@@ -180,7 +184,7 @@ public class AceOfSpace extends BasicGame {
                 if (gc.hasFocus()) {
                     state = STATE_PLAYING;
                 }
-                
+
                 break;
         }
     }
