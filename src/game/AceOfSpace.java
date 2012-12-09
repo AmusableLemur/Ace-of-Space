@@ -187,6 +187,9 @@ public class AceOfSpace extends BasicGame {
             }
 
             if (e.intersects(player)) {
+                Sound sound = new Sound("sound/gameOver.wav");
+                sound.play();
+                
                 state = STATE_GAME_OVER;
             }
         }
