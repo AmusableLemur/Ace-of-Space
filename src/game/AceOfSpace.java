@@ -18,81 +18,17 @@ import org.newdawn.slick.font.effects.OutlineEffect;
  * @author Rasmus Larsson
  */
 public class AceOfSpace extends BasicGame {
-    /**
-     * Used when player has been hit and game needs to be restarted
-     */
-    private static final int STATE_GAME_OVER = -1;
-
-    /**
-     * Player initiated pausing of game
-     */
-    private static final int STATE_PAUSED = 0;
-
-    /**
-     * Default mode, actual game is running
-     */
-    private static final int STATE_PLAYING = 1;
-
-    /**
-     * Unused, will be used for credits and a "start game" button
-     */
-    private static final int STATE_MENU = 2;
-
-    /**
-     * Freezes the game when it loses focus
-     */
-    private static final int STATE_FROZEN = 3;
-
-    /**
-     * Makes sure certain elements aren't loaded or started twice
-     */
     private boolean gameStarted;
-
-    /**
-     * Player score
-     */
     private float score;
-
-    /**
-     * Time since current session started
-     */
     private int gameTime;
-
-    /**
-     * The current state
-     */
-    private int state;
-
-    /**
-     * Lists for various game objects, CopyOnWrite to allow for concurrent
-     * modifications.
-     */
     private CopyOnWriteArrayList<Enemy> enemies;
     private CopyOnWriteArrayList<Explosion> explosions;
-
-    /**
-     * Scrolling background, two layers for "deep" effect
-     */
     private Background background, stars;
-
-    /**
-     * Background music, all other music is instantiated when it's used
-     */
     private Music music;
-
-    /**
-     * The human controlled player object
-     */
     private Player player;
-
-    /**
-     * Font faces
-     */
+    private State state;
     private UnicodeFont largeText, smallText;
 
-    /**
-     * Constructor, sets the title of the window
-     */
     public AceOfSpace() {
         super("Ace of Space");
     }
@@ -108,7 +44,7 @@ public class AceOfSpace extends BasicGame {
         explosions = new CopyOnWriteArrayList<>();
         player = new Player(gc);
         gameTime = 0;
-        state = STATE_PLAYING;
+        state = State.PLAYING;
         score = 0;
 
         if (!gameStarted) {
@@ -190,7 +126,7 @@ public class AceOfSpace extends BasicGame {
                 Sound sound = new Sound("sound/gameOver.wav");
                 sound.play();
 
-                state = STATE_GAME_OVER;
+                state = State.GAME_OVER;
             }
         }
 
@@ -208,11 +144,11 @@ public class AceOfSpace extends BasicGame {
 
         if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             music.pause();
-            state = STATE_PAUSED;
+            state = State.PAUSED;
         }
 
         if (!gc.hasFocus()) {
-            state = STATE_FROZEN;
+            state = State.FROZEN;
         }
     }
 
@@ -229,29 +165,29 @@ public class AceOfSpace extends BasicGame {
         }
 
         switch (state) {
-            case STATE_GAME_OVER:
-
+            case GAME_OVER:
                 if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
                     init(gc);
                 }
 
                 break;
-            case STATE_PAUSED:
+            case PAUSED:
                 if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
                     music.resume();
-                    state = STATE_PLAYING;
+
+                    state = State.PLAYING;
                 }
 
                 break;
-            case STATE_PLAYING:
+            case PLAYING:
                 play(gc, delta);
 
                 break;
-            case STATE_MENU:
+            case MENU:
                 break;
-            case STATE_FROZEN:
+            case FROZEN:
                 if (gc.hasFocus()) {
-                    state = STATE_PLAYING;
+                    state = State.PLAYING;
                 }
 
                 break;
@@ -279,11 +215,11 @@ public class AceOfSpace extends BasicGame {
 
         player.render(gc, g);
 
-        String infoText = "Score: " + (int)score;
+        String infoText = "Score: " + score;
         smallText.drawString(10, 10, infoText);
 
         switch (state) {
-            case STATE_GAME_OVER:
+            case GAME_OVER:
                 String title = "Game Over";
                 String subtitle = "Press space to restart";
 
