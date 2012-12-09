@@ -6,9 +6,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class Explosion extends Image {
-    private double x, y, time;
+    private float time, x, y;
 
-    public Explosion(double x, double y, double time) throws SlickException {
+    public Explosion(float x, float y, float time) throws SlickException {
         super("graphics/laserGreenShot.png");
 
         this.x = x;
@@ -16,15 +16,27 @@ public class Explosion extends Image {
         this.time = time;
     }
 
-    public double getTime() {
+    public float getTime() {
         return time;
     }
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
     public void update(GameContainer gc, int delta) {
-        time -= delta;
+        setTime(getTime() - delta);
     }
 
     public void render(GameContainer gc, Graphics g) {
-        g.drawImage(this, (int)x - getWidth() / 2, (int)y - getHeight() / 2);
+        g.drawImage(this, getX() - getWidth() / 2, getY() - getHeight() / 2);
+    }
+
+    protected void setTime(float time) {
+        this.time = time;
     }
 }

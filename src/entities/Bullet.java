@@ -2,25 +2,33 @@ package entities;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 public class Bullet extends GameObject {
-    private double speed;
+    private float speed;
 
-    public Bullet(double x, double y, double speed) {
+    public Bullet(float x, float y, float speed) throws SlickException {
         super(x, y, "graphics/laserGreen.png");
-
-        setX(getX() - graphic.getWidth() / 2);
+        setX(getX() - getImage().getWidth() / 2);
 
         this.speed = speed;
     }
 
+    public float getSpeed() {
+        return speed;
+    }
+
     @Override
     public void render(GameContainer gc, Graphics g) {
-        g.drawImage(graphic, (int)x, (int)y);
+        g.drawImage(getImage(), getX(), getY());
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 
     @Override
     public void update(GameContainer gc, int delta) {
-        y -= speed * delta;
+        setY(getY() - getSpeed() * delta);
     }
 }

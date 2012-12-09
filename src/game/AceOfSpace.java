@@ -51,7 +51,7 @@ public class AceOfSpace extends BasicGame {
     /**
      * Player score
      */
-    private double score;
+    private float score;
 
     /**
      * Time since current session started
@@ -144,7 +144,7 @@ public class AceOfSpace extends BasicGame {
      * @throws SlickException
      */
     public void play(GameContainer gc, int delta) throws SlickException {
-        score += (double)delta / 100;
+        score += delta / 100;
         gameTime += delta;
 
         if (Math.random() < 0.05 && !gc.isPaused()) {
@@ -189,7 +189,7 @@ public class AceOfSpace extends BasicGame {
             if (e.intersects(player)) {
                 Sound sound = new Sound("sound/gameOver.wav");
                 sound.play();
-                
+
                 state = STATE_GAME_OVER;
             }
         }

@@ -1,18 +1,14 @@
 package entities;
 
-import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.*;
 
 public class Player extends GameObject {
     private CopyOnWriteArrayList<Bullet> bullets;
     private int timeSinceFire;
 
-    public Player(GameContainer gc) {
+    public Player(GameContainer gc) throws SlickException {
         super(gc.getWidth() / 2 - 15, gc.getHeight() - 80, "graphics/player.png");
-
         setWidth(getWidth() / 2);
 
         bullets = new CopyOnWriteArrayList<>();
@@ -45,37 +41,32 @@ public class Player extends GameObject {
 
     @Override
     public void render(GameContainer gc, Graphics g) {
-        g.drawImage(graphic, getX() - graphic.getWidth() / 4, getY());
+        g.drawImage(getImage(), getX() - getImage().getWidth() / 4, getY());
 
-        for (Bullet b : bullets) {
+        for (Bullet b : getBullets()) {
             b.render(gc, g);
         }
     }
 
     @Override
-    public void update(GameContainer gc, int delta) {
+    public void update(GameContainer gc, int delta) throws SlickException {
         controls(gc, delta);
 
         timeSinceFire += delta;
 
         if (timeSinceFire > 500) {
-            bullets.add(new Bullet(getCenterX(), getY(), 0.9));
-
-            try {
-                Sound sound = new Sound("sound/laser.wav");
-                sound.play();
-            } catch (SlickException ex) {
-                Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+            Sound sound = new Sound("sound/laser.wav");
             timeSinceFire = 0;
+
+            getBullets().add(new Bullet(getCenterX(), getY(), 0.9f));
+            sound.play();
         }
 
         for (Bullet b : bullets) {
             b.update(gc, delta);
 
             if (b.outsideOfScreen(gc)) {
-                bullets.remove(b);
+                getBullets().remove(b);
             }
         }
     }
