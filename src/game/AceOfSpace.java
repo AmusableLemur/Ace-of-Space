@@ -34,6 +34,54 @@ public class AceOfSpace extends BasicGame {
         super("Ace of Space");
     }
 
+    public void addFont(String index, UnicodeFont font) {
+        fonts.put(index, font);
+    }
+
+    public Background getBackground() {
+        return background;
+    }
+
+    public CopyOnWriteArrayList<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public CopyOnWriteArrayList<Explosion> getExplosions() {
+        return explosions;
+    }
+
+    public HashMap<String, UnicodeFont> getFonts() {
+        return fonts;
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
+
+    public int getGameTime() {
+        return gameTime;
+    }
+
+    public Music getMusic() {
+        return music;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public float getScore() {
+        return score;
+    }
+
+    public Background getStars() {
+        return stars;
+    }
+
+    public State getState() {
+        return state;
+    }
+
     /**
      * Resets the game state and initiates game variables
      * @param gc
@@ -41,21 +89,20 @@ public class AceOfSpace extends BasicGame {
      */
     @Override
     public void init(GameContainer gc) throws SlickException {
-        enemies = new CopyOnWriteArrayList<>();
-        explosions = new CopyOnWriteArrayList<>();
-        player = new Player(gc);
-        gameTime = 0;
-        state = State.PLAYING;
-        score = 0;
+        setEnemies(new CopyOnWriteArrayList<Enemy>());
+        setExplosions(new CopyOnWriteArrayList<Explosion>());
+        setPlayer(new Player(gc));
+        setGameTime(0);
+        setScore(0);
+        setState(State.PLAYING);
 
-        if (!gameStarted) {
-            background = new Background("graphics/bg.png", 0.05);
-            stars = new Background("graphics/stars.png", 0.08);
-            music = new Music("music/DefconZero.ogg");
-            fonts = new HashMap<>();
-
-            fonts.put("small", new UnicodeFont("graphics/apache.ttf", 32, false, false));
-            fonts.put("large", new UnicodeFont("graphics/apache.ttf", 84, false, false));
+        if (!isGameStarted()) {
+            setBackground(new Background("graphics/bg.png", 0.05));
+            setStars(new Background("graphics/stars.png", 0.08));
+            setFonts(new HashMap<String, UnicodeFont>());
+            setMusic(new Music("music/DefconZero.ogg"));
+            addFont("small", new UnicodeFont("graphics/apache.ttf", 32, false, false));
+            addFont("large", new UnicodeFont("graphics/apache.ttf", 84, false, false));
             music.loop();
 
             for (UnicodeFont font : fonts.values()) {
@@ -68,8 +115,7 @@ public class AceOfSpace extends BasicGame {
 
         gc.setDefaultFont(fonts.get("small"));
         gc.setShowFPS(false);
-
-        gameStarted = true;
+        setGameStarted(true);
     }
 
     /**
@@ -79,8 +125,8 @@ public class AceOfSpace extends BasicGame {
      * @throws SlickException
      */
     public void play(GameContainer gc, int delta) throws SlickException {
-        score += delta / 100;
-        gameTime += delta;
+        setScore(getScore() + delta / 100f);
+        setGameTime(getGameTime() + delta);
 
         if (Math.random() < 0.05) {
             enemies.add(new Asteroid(gc));
@@ -90,25 +136,23 @@ public class AceOfSpace extends BasicGame {
             enemies.add(new BigAsteroid(gc));
         }
 
-        if (gameTime > 10000 && Math.random() < 0.005) {
-            enemies.add(new Saucer(gc));
+        if (getGameTime() > 10000 && Math.random() < 0.005) {
+            getEnemies().add(new Saucer(gc));
         }
 
         for (Enemy e : enemies) {
             e.update(gc, delta, player);
 
             if (e.outsideOfScreen(gc)) {
-                enemies.remove(e);
+                getEnemies().remove(e);
             }
 
             for (Bullet b : player.getBullets()) {
                 if (e.intersects(b)) {
-                    score += e.getScore();
-
-                    enemies.remove(e);
-                    player.getBullets().remove(b);
-
-                    explosions.add(new Explosion(b.getX(), b.getY(), 100));
+                    setScore(getScore() + e.getScore());
+                    getEnemies().remove(e);
+                    getPlayer().getBullets().remove(b);
+                    getExplosions().add(new Explosion(b.getX(), b.getY(), 100));
 
                     Sound sound = new Sound("sound/explosion.wav");
                     sound.play();
@@ -123,32 +167,76 @@ public class AceOfSpace extends BasicGame {
 
             if (e.intersects(player)) {
                 Sound sound = new Sound("sound/gameOver.wav");
-                sound.play();
 
-                state = State.GAME_OVER;
+                sound.play();
+                setState(State.GAME_OVER);
             }
         }
 
-        for (Explosion ex : explosions) {
+        for (Explosion ex : getExplosions()) {
             ex.update(gc, delta);
 
             if (ex.getTime() < 0) {
-                explosions.remove(ex);
+                getExplosions().remove(ex);
             }
         }
 
-        player.update(gc, delta);
-        background.update(gc, delta);
-        stars.update(gc, delta);
-
         if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            music.pause();
-            state = State.PAUSED;
+            getMusic().pause();
+            setState(State.PAUSED);
         }
 
         if (!gc.hasFocus()) {
-            state = State.FROZEN;
+            setState(State.FROZEN);
         }
+
+        getPlayer().update(gc, delta);
+        getBackground().update(gc, delta);
+        getStars().update(gc, delta);
+    }
+
+    public void setBackground(Background background) {
+        this.background = background;
+    }
+
+    public void setEnemies(CopyOnWriteArrayList<Enemy> enemies) {
+        this.enemies = enemies;
+    }
+
+    public void setExplosions(CopyOnWriteArrayList<Explosion> explosions) {
+        this.explosions = explosions;
+    }
+
+    public void setFonts(HashMap<String, UnicodeFont> fonts) {
+        this.fonts = fonts;
+    }
+
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
+    }
+
+    public void setGameTime(int gameTime) {
+        this.gameTime = gameTime;
+    }
+
+    public void setMusic(Music music) {
+        this.music = music;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
+    }
+
+    public void setStars(Background stars) {
+        this.stars = stars;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     /**
@@ -173,8 +261,7 @@ public class AceOfSpace extends BasicGame {
             case PAUSED:
                 if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
                     music.resume();
-
-                    state = State.PLAYING;
+                    setState(State.PLAYING);
                 }
 
                 break;
@@ -186,7 +273,7 @@ public class AceOfSpace extends BasicGame {
                 break;
             case FROZEN:
                 if (gc.hasFocus()) {
-                    state = State.PLAYING;
+                    setState(State.PLAYING);
                 }
 
                 break;
@@ -201,8 +288,8 @@ public class AceOfSpace extends BasicGame {
      */
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
-        background.render(gc, g);
-        stars.render(gc, g);
+        getBackground().render(gc, g);
+        getStars().render(gc, g);
 
         for (Enemy e : enemies) {
             e.render(gc, g);
@@ -214,7 +301,7 @@ public class AceOfSpace extends BasicGame {
 
         player.render(gc, g);
 
-        String infoText = "Score: " + score;
+        String infoText = "Score: " + (int)getScore();
         fonts.get("small").drawString(10, 10, infoText);
 
         switch (state) {
