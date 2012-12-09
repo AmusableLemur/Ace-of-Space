@@ -8,6 +8,7 @@ import entities.enemy.BigAsteroid;
 import entities.enemy.Enemy;
 import entities.enemy.Saucer;
 import graphics.Background;
+import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -27,7 +28,7 @@ public class AceOfSpace extends BasicGame {
     private Music music;
     private Player player;
     private State state;
-    private UnicodeFont largeText, smallText;
+    private HashMap<String,UnicodeFont> fonts;
 
     public AceOfSpace() {
         super("Ace of Space");
@@ -51,23 +52,21 @@ public class AceOfSpace extends BasicGame {
             background = new Background("graphics/bg.png", 0.05);
             stars = new Background("graphics/stars.png", 0.08);
             music = new Music("music/DefconZero.ogg");
-            smallText = new UnicodeFont("graphics/apache.ttf", 32, false, false);
-            largeText = new UnicodeFont("graphics/apache.ttf", 84, false, false);
+            fonts = new HashMap<>();
 
+            fonts.put("small", new UnicodeFont("graphics/apache.ttf", 32, false, false));
+            fonts.put("large", new UnicodeFont("graphics/apache.ttf", 84, false, false));
             music.loop();
 
-            smallText.addAsciiGlyphs();
-            smallText.getEffects().add(new ColorEffect(java.awt.Color.white));
-            smallText.getEffects().add(new OutlineEffect(1, java.awt.Color.gray));
-            smallText.loadGlyphs();
-
-            largeText.addAsciiGlyphs();
-            largeText.getEffects().add(new ColorEffect(java.awt.Color.white));
-            largeText.getEffects().add(new OutlineEffect(3, java.awt.Color.gray));
-            largeText.loadGlyphs();
+            for (UnicodeFont font : fonts.values()) {
+                font.addAsciiGlyphs();
+                font.getEffects().add(new ColorEffect(java.awt.Color.white));
+                font.getEffects().add(new OutlineEffect(font.getSpaceWidth() / 8, java.awt.Color.gray));
+                font.loadGlyphs();
+            }
         }
 
-        gc.setDefaultFont(smallText);
+        gc.setDefaultFont(fonts.get("small"));
         gc.setShowFPS(false);
 
         gameStarted = true;
@@ -216,21 +215,21 @@ public class AceOfSpace extends BasicGame {
         player.render(gc, g);
 
         String infoText = "Score: " + score;
-        smallText.drawString(10, 10, infoText);
+        fonts.get("small").drawString(10, 10, infoText);
 
         switch (state) {
             case GAME_OVER:
                 String title = "Game Over";
                 String subtitle = "Press space to restart";
 
-                largeText.drawString(
-                        gc.getWidth() / 2 - largeText.getWidth(title) / 2,
+                fonts.get("large").drawString(
+                        gc.getWidth() / 2 - fonts.get("large").getWidth(title) / 2,
                         gc.getHeight() / 2 - 60,
                         title
                     );
 
-                smallText.drawString(
-                        gc.getWidth() / 2 - smallText.getWidth(subtitle) / 2,
+                fonts.get("small").drawString(
+                        gc.getWidth() / 2 - fonts.get("small").getWidth(subtitle) / 2,
                         gc.getHeight() / 2 + 20,
                         subtitle
                     );
