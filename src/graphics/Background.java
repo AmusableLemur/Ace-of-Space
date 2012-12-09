@@ -1,32 +1,29 @@
 package graphics;
 
+import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
-public class Background extends Image {
-    private double offset, speed;
+public class Background {
+    private ArrayList<Layer> layers;
 
-    public Background(String resource, double speed) throws SlickException {
-        super(resource);
+    public Background() {
+        this.layers = new ArrayList<>();
+    }
 
-        this.speed = speed;
+    public void addLayer(Layer layer) {
+        layers.add(layer);
     }
 
     public void update(GameContainer gc, int delta) {
-        if (offset > 0) {
-            offset = -getHeight();
+        for (Layer layer : layers) {
+            layer.update(gc, delta);
         }
-
-        offset += delta * speed;
     }
 
     public void render(GameContainer gc, Graphics g) {
-        for (int x = 0; x < gc.getWidth(); x += getWidth()) {
-            for (int y = (int)offset; y < gc.getHeight(); y += getHeight()) {
-                g.drawImage(this, x, y);
-            }
+        for (Layer layer : layers) {
+            layer.render(gc, g);
         }
     }
 }

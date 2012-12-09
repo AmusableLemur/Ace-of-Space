@@ -8,6 +8,7 @@ import entities.enemy.BigAsteroid;
 import entities.enemy.Enemy;
 import entities.enemy.Saucer;
 import graphics.Background;
+import graphics.Layer;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.newdawn.slick.*;
@@ -24,14 +25,16 @@ public class AceOfSpace extends BasicGame {
     private int gameTime;
     private CopyOnWriteArrayList<Enemy> enemies;
     private CopyOnWriteArrayList<Explosion> explosions;
-    private Background background, stars;
+    private Background background;
     private Music music;
     private Player player;
     private State state;
     private HashMap<String,UnicodeFont> fonts;
 
-    public AceOfSpace() {
+    public AceOfSpace() throws SlickException {
         super("Ace of Space");
+
+        background = new Background();
     }
 
     public void addFont(String index, UnicodeFont font) {
@@ -74,10 +77,6 @@ public class AceOfSpace extends BasicGame {
         return score;
     }
 
-    public Background getStars() {
-        return stars;
-    }
-
     public State getState() {
         return state;
     }
@@ -97,8 +96,8 @@ public class AceOfSpace extends BasicGame {
         setState(State.PLAYING);
 
         if (!isGameStarted()) {
-            setBackground(new Background("graphics/bg.png", 0.05));
-            setStars(new Background("graphics/stars.png", 0.08));
+            getBackground().addLayer(new Layer("graphics/bg.png", 0.05f));
+            getBackground().addLayer(new Layer("graphics/stars.png", 0.08f));
             setFonts(new HashMap<String, UnicodeFont>());
             setMusic(new Music("music/DefconZero.ogg"));
             addFont("small", new UnicodeFont("graphics/apache.ttf", 32, false, false));
@@ -192,11 +191,6 @@ public class AceOfSpace extends BasicGame {
 
         getPlayer().update(gc, delta);
         getBackground().update(gc, delta);
-        getStars().update(gc, delta);
-    }
-
-    public void setBackground(Background background) {
-        this.background = background;
     }
 
     public void setEnemies(CopyOnWriteArrayList<Enemy> enemies) {
@@ -229,10 +223,6 @@ public class AceOfSpace extends BasicGame {
 
     public void setScore(float score) {
         this.score = score;
-    }
-
-    public void setStars(Background stars) {
-        this.stars = stars;
     }
 
     public void setState(State state) {
@@ -289,7 +279,6 @@ public class AceOfSpace extends BasicGame {
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
         getBackground().render(gc, g);
-        getStars().render(gc, g);
 
         for (Enemy e : enemies) {
             e.render(gc, g);
