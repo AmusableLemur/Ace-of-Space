@@ -83,15 +83,15 @@ public class AceOfSpace extends BasicGame {
         score += delta / 100;
         gameTime += delta;
 
-        if (Math.random() < 0.05 && !gc.isPaused()) {
+        if (Math.random() < 0.05) {
             enemies.add(new Asteroid(gc));
         }
 
-        if (Math.random() < 0.01 && !gc.isPaused()) {
+        if (Math.random() < 0.01) {
             enemies.add(new BigAsteroid(gc));
         }
 
-        if (gameTime > 10000 && Math.random() < 0.005 && !gc.isPaused()) {
+        if (gameTime > 10000 && Math.random() < 0.005) {
             enemies.add(new Saucer(gc));
         }
 
