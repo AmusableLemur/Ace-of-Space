@@ -290,7 +290,7 @@ public class AceOfSpace extends BasicGame {
                 break;
             case PAUSED:
                 if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-                    music.resume();
+                    getMusic().resume();
                     setState(State.PLAYING);
                 }
 
