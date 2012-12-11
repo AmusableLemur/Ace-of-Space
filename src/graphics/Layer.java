@@ -6,8 +6,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class Layer extends Image {
-    private float speed;
-    private int offset;
+    private float speed, offset;
 
     public Layer(String resource, float speed) throws SlickException {
         super(resource);
@@ -15,7 +14,7 @@ public class Layer extends Image {
         this.speed = speed;
     }
 
-    public int getOffset() {
+    public float getOffset() {
         return offset;
     }
 
@@ -33,7 +32,7 @@ public class Layer extends Image {
 
     public void render(GameContainer gc, Graphics g) {
         for (int x = 0; x < gc.getWidth(); x += getWidth()) {
-            for (int y = getOffset(); y < gc.getHeight(); y += getHeight()) {
+            for (int y = (int)getOffset(); y < gc.getHeight(); y += getHeight()) {
                 g.drawImage(this, x, y);
             }
         }
@@ -44,6 +43,6 @@ public class Layer extends Image {
     }
 
     protected void incrementOffset(float amount) {
-        this.offset += offset;
+        this.offset += amount;
     }
 }
