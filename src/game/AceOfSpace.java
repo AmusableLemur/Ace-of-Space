@@ -20,7 +20,6 @@ import org.newdawn.slick.font.effects.OutlineEffect;
  * @author Rasmus Larsson
  */
 public class AceOfSpace extends BasicGame {
-    private boolean gameStarted;
     private float score;
     private int gameTime;
     private CopyOnWriteArrayList<Enemy> enemies;
@@ -53,12 +52,8 @@ public class AceOfSpace extends BasicGame {
         return explosions;
     }
 
-    public HashMap<String, UnicodeFont> getFonts() {
-        return fonts;
-    }
-
-    public boolean isGameStarted() {
-        return gameStarted;
+    public UnicodeFont getFont(String index) {
+        return fonts.get(index);
     }
 
     public int getGameTime() {
@@ -88,33 +83,28 @@ public class AceOfSpace extends BasicGame {
      */
     @Override
     public void init(GameContainer gc) throws SlickException {
-        setEnemies(new CopyOnWriteArrayList<Enemy>());
-        setExplosions(new CopyOnWriteArrayList<Explosion>());
-        setPlayer(new Player(gc));
-        setGameTime(0);
-        setScore(0);
-        setState(State.PLAYING);
+        getBackground().addLayer(new Layer("graphics/bg.png", 0.05f));
+        getBackground().addLayer(new Layer("graphics/stars.png", 0.08f));
+        setMusic(new Music("music/DefconZero.ogg"));
+        getMusic().loop();
 
-        if (!isGameStarted()) {
-            getBackground().addLayer(new Layer("graphics/bg.png", 0.05f));
-            getBackground().addLayer(new Layer("graphics/stars.png", 0.08f));
-            setFonts(new HashMap<String, UnicodeFont>());
-            setMusic(new Music("music/DefconZero.ogg"));
-            addFont("small", new UnicodeFont("graphics/apache.ttf", 32, false, false));
-            addFont("large", new UnicodeFont("graphics/apache.ttf", 84, false, false));
-            music.loop();
+        HashMap<String, UnicodeFont> fonts = new HashMap<>();
 
-            for (UnicodeFont font : fonts.values()) {
-                font.addAsciiGlyphs();
-                font.getEffects().add(new ColorEffect(java.awt.Color.white));
-                font.getEffects().add(new OutlineEffect(font.getSpaceWidth() / 8, java.awt.Color.gray));
-                font.loadGlyphs();
-            }
+        fonts.put("small", new UnicodeFont("graphics/apache.ttf", 32, false, false));
+        fonts.put("large", new UnicodeFont("graphics/apache.ttf", 84, false, false));
+
+        for (UnicodeFont font : fonts.values()) {
+            font.addAsciiGlyphs();
+            font.getEffects().add(new ColorEffect(java.awt.Color.white));
+            font.getEffects().add(new OutlineEffect(font.getSpaceWidth() / 8, java.awt.Color.gray));
+            font.loadGlyphs();
         }
 
+        setFonts(fonts);
         gc.setDefaultFont(fonts.get("small"));
         gc.setShowFPS(false);
-        setGameStarted(true);
+
+        startNewGame(gc);
     }
 
     /**
@@ -154,6 +144,7 @@ public class AceOfSpace extends BasicGame {
                     getExplosions().add(new Explosion(b.getX(), b.getY(), 100));
 
                     Sound sound = new Sound("sound/explosion.wav");
+
                     sound.play();
 
                     if (e instanceof BigAsteroid) {
@@ -193,6 +184,59 @@ public class AceOfSpace extends BasicGame {
         getBackground().update(gc, delta);
     }
 
+    /**
+     * Renders viewport, agnostic to game state except for Game Over
+     * @param gc
+     * @param g
+     * @throws SlickException
+     */
+    @Override
+    public void render(GameContainer gc, Graphics g) throws SlickException {
+        getBackground().render(gc, g);
+
+        for (Enemy e : enemies) {
+            e.render(gc, g);
+        }
+
+        for (Explosion e : explosions) {
+            e.render(gc, g);
+        }
+
+        getPlayer().render(gc, g);
+
+        String infoText = "Score: " + (int)getScore();
+        getFont("small").drawString(10, 10, infoText);
+
+        switch (state) {
+            case GAME_OVER:
+                String title = "Game Over";
+                String subtitle = "Press space to restart";
+
+                getFont("large").drawString(
+                        gc.getWidth() / 2 - getFont("large").getWidth(title) / 2,
+                        gc.getHeight() / 2 - 60,
+                        title
+                    );
+
+                getFont("small").drawString(
+                        gc.getWidth() / 2 - getFont("small").getWidth(subtitle) / 2,
+                        gc.getHeight() / 2 + 20,
+                        subtitle
+                    );
+
+                break;
+        }
+    }
+
+    public void startNewGame(GameContainer gc) throws SlickException {
+        setEnemies(new CopyOnWriteArrayList<Enemy>());
+        setExplosions(new CopyOnWriteArrayList<Explosion>());
+        setPlayer(new Player(gc));
+        setGameTime(0);
+        setScore(0);
+        setState(State.PLAYING);
+    }
+
     public void setEnemies(CopyOnWriteArrayList<Enemy> enemies) {
         this.enemies = enemies;
     }
@@ -203,10 +247,6 @@ public class AceOfSpace extends BasicGame {
 
     public void setFonts(HashMap<String, UnicodeFont> fonts) {
         this.fonts = fonts;
-    }
-
-    public void setGameStarted(boolean gameStarted) {
-        this.gameStarted = gameStarted;
     }
 
     public void setGameTime(int gameTime) {
@@ -244,7 +284,7 @@ public class AceOfSpace extends BasicGame {
         switch (state) {
             case GAME_OVER:
                 if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-                    init(gc);
+                    startNewGame(gc);
                 }
 
                 break;
@@ -265,50 +305,6 @@ public class AceOfSpace extends BasicGame {
                 if (gc.hasFocus()) {
                     setState(State.PLAYING);
                 }
-
-                break;
-        }
-    }
-
-    /**
-     * Renders viewport, agnostic to game state except for Game Over
-     * @param gc
-     * @param g
-     * @throws SlickException
-     */
-    @Override
-    public void render(GameContainer gc, Graphics g) throws SlickException {
-        getBackground().render(gc, g);
-
-        for (Enemy e : enemies) {
-            e.render(gc, g);
-        }
-
-        for (Explosion e : explosions) {
-            e.render(gc, g);
-        }
-
-        player.render(gc, g);
-
-        String infoText = "Score: " + (int)getScore();
-        fonts.get("small").drawString(10, 10, infoText);
-
-        switch (state) {
-            case GAME_OVER:
-                String title = "Game Over";
-                String subtitle = "Press space to restart";
-
-                fonts.get("large").drawString(
-                        gc.getWidth() / 2 - fonts.get("large").getWidth(title) / 2,
-                        gc.getHeight() / 2 - 60,
-                        title
-                    );
-
-                fonts.get("small").drawString(
-                        gc.getWidth() / 2 - fonts.get("small").getWidth(subtitle) / 2,
-                        gc.getHeight() / 2 + 20,
-                        subtitle
-                    );
 
                 break;
         }
