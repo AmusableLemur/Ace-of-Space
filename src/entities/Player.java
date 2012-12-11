@@ -5,6 +5,7 @@ import org.newdawn.slick.*;
 
 public class Player extends GameObject {
     private CopyOnWriteArrayList<Bullet> bullets;
+    private float score;
     private int timeSinceFire;
 
     public Player(GameContainer gc) throws SlickException {
@@ -37,6 +38,14 @@ public class Player extends GameObject {
 
     public CopyOnWriteArrayList<Bullet> getBullets() {
         return bullets;
+    }
+
+    public int getScore() {
+        return (int)score;
+    }
+
+    public void incrementScore(float amount) {
+        score += amount;
     }
 
     @Override

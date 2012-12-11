@@ -20,7 +20,6 @@ import org.newdawn.slick.font.effects.OutlineEffect;
  * @author Rasmus Larsson
  */
 public class AceOfSpace extends BasicGame {
-    private float score;
     private int gameTime;
     private CopyOnWriteArrayList<Enemy> enemies;
     private CopyOnWriteArrayList<Explosion> explosions;
@@ -68,10 +67,6 @@ public class AceOfSpace extends BasicGame {
         return player;
     }
 
-    public float getScore() {
-        return score;
-    }
-
     public State getState() {
         return state;
     }
@@ -114,7 +109,7 @@ public class AceOfSpace extends BasicGame {
      * @throws SlickException
      */
     public void play(GameContainer gc, int delta) throws SlickException {
-        setScore(getScore() + delta / 100f);
+        getPlayer().incrementScore(delta / 100f);
         setGameTime(getGameTime() + delta);
 
         if (Math.random() < 0.05) {
@@ -138,7 +133,7 @@ public class AceOfSpace extends BasicGame {
 
             for (Bullet b : player.getBullets()) {
                 if (e.intersects(b)) {
-                    setScore(getScore() + e.getScore());
+                    getPlayer().incrementScore(e.getScore());
                     getEnemies().remove(e);
                     getPlayer().getBullets().remove(b);
                     getExplosions().add(new Explosion(b.getX(), b.getY(), 100));
@@ -204,7 +199,7 @@ public class AceOfSpace extends BasicGame {
 
         getPlayer().render(gc, g);
 
-        String infoText = "Score: " + (int)getScore();
+        String infoText = "Score: " + getPlayer().getScore();
         getFont("small").drawString(10, 10, infoText);
 
         switch (state) {
@@ -233,7 +228,6 @@ public class AceOfSpace extends BasicGame {
         setExplosions(new CopyOnWriteArrayList<Explosion>());
         setPlayer(new Player(gc));
         setGameTime(0);
-        setScore(0);
         setState(State.PLAYING);
     }
 
@@ -259,10 +253,6 @@ public class AceOfSpace extends BasicGame {
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
-
-    public void setScore(float score) {
-        this.score = score;
     }
 
     public void setState(State state) {
