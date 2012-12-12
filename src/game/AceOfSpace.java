@@ -35,10 +35,6 @@ public class AceOfSpace extends BasicGame {
         background = new Background();
     }
 
-    public void addFont(String index, UnicodeFont font) {
-        fonts.put(index, font);
-    }
-
     public Background getBackground() {
         return background;
     }
