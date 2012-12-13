@@ -43,6 +43,6 @@ public class Layer extends Image {
     }
 
     protected void incrementOffset(float amount) {
-        this.offset += amount;
+        offset += amount;
     }
 }
