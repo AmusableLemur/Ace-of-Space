@@ -2,6 +2,8 @@
 
 A simple shmup built on Java and Slick2D.
 
+![Screenshot](screenshot.png)
+
 
 ## Compiling
 
