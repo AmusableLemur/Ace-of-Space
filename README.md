@@ -1,11 +1,17 @@
-Compiling
-=========
+# Ace of Space
+
+A simple shmup built on Java and Slick2D.
+
+
+## Compiling
+
 This game is created with Slick2D and LWJGL, to build it yourself you need to
 set up your environment according to the Slick2D wiki:
 http://www.slick2d.org/wiki/index.php/Main_Page
 
-License
-=======
+
+## License
+
 Copyright (C) 2012 Rasmus Larsson
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
